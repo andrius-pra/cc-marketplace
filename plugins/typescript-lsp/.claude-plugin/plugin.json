@@ -1,7 +1,7 @@
 {
-    "name": "angular-lsp",
-    "description": "Angular LSP",
-    "version": "1.0.0",
+    "name": "typescript-lsp",
+    "description": "Typescript LSP",
+    "version": "1.0.2",
     "author": {
         "name": "andrius-pra"
     },
