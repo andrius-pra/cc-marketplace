@@ -1,0 +1,17 @@
+{
+    "name": "csharp-lsp",
+    "description": "C# LSP",
+    "version": "1.0.0",
+    "author": {
+        "name": "andrius-pra"
+    },
+    "lspServers": {
+        "csharp-ls": {
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/lsp-proxy.mjs"],
+            "extensionToLanguage": {
+                ".cs": "csharp"
+            }
+        }
+    }
+}

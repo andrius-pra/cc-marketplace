@@ -4,10 +4,13 @@ import { spawn } from "node:child_process";
 import { createWriteStream } from "node:fs";
 import { argv, stdin, stdout, stderr, exit, env } from "node:process";
 
-const logPath = env.ANGULAR_LSP_LOG_FILE || "lsp-log.jsonl";
-const logStream = createWriteStream(logPath, { flags: "a" });
+const debug = !!env.DEBUG;
+const logStream = debug
+  ? createWriteStream(env.LSP_LOG_FILE || "lsp-log.jsonl", { flags: "a" })
+  : null;
 
 function log(direction, message) {
+  if (!logStream) return;
   const entry = JSON.stringify({
     timestamp: new Date().toISOString(),
     direction,
@@ -146,13 +149,15 @@ child.stderr.pipe(stderr);
 // --- Lifecycle ---
 
 child.on("exit", (code, signal) => {
-  logStream.end(() => {
+  const done = () => {
     if (signal) {
       process.kill(process.pid, signal);
     } else {
       exit(code ?? 1);
     }
-  });
+  };
+  if (logStream) logStream.end(done);
+  else done();
 });
 
 child.on("error", (err) => {

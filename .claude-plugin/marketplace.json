@@ -14,6 +14,11 @@
       "name": "angular-lsp",
       "source": "./plugins/angular-lsp",
       "description": "Angular language server with URI normalization proxy and full TS support"
+    },
+    {
+      "name": "csharp-lsp",
+      "source": "./plugins/csharp-lsp",
+      "description": "C# language server using csharp-ls"
     }
   ]
 }
