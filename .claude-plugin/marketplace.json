@@ -1,0 +1,19 @@
+{
+  "name": "andrius-pra-plugins",
+  "owner": {
+    "name": "andrius-pra",
+    "email": "17968027+andrius-pra@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "typescript-lsp",
+      "source": "./plugins/typescript-lsp",
+      "description": "TypeScript/JavaScript language server with URI normalization proxy"
+    },
+    {
+      "name": "angular-lsp",
+      "source": "./plugins/angular-lsp",
+      "description": "Angular language server with URI normalization proxy and full TS support"
+    }
+  ]
+}
