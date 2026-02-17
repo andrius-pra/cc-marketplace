@@ -15,9 +15,11 @@ function log(direction, message) {
     timestamp: new Date().toISOString(),
     direction,
     message,
-  });
+  }); 
   logStream.write(entry + "\n");
 }
+
+log('start')
 
 // --- URI normalization (client→server only) ---
 
@@ -112,7 +114,8 @@ function createMessageParser(direction, forward, { transform } = {}) {
 // Pass through all args except the script name itself
 const args = argv.slice(2);
 const tsLspPath = new URL("./node_modules/typescript-language-server/lib/cli.mjs", import.meta.url).pathname.replace(/^\//, "");
-const child = spawn(process.execPath, [tsLspPath, ...args], {
+log("spawn", { execPath: process.execPath, tsLspPath, args });
+const child = spawn(process.execPath, [tsLspPath, "--stdio", ...args], {
   stdio: ["pipe", "pipe", "pipe"],
 });
 
@@ -133,8 +136,11 @@ const parseFromServer = createMessageParser("server→client", (data) => {
 
 child.stdout.on("data", parseFromServer);
 
-// stderr pass-through
-child.stderr.pipe(stderr);
+// stderr → log + pass-through
+child.stderr.on("data", (chunk) => {
+  log("stderr", chunk.toString());
+  stderr.write(chunk);
+});
 
 // --- Lifecycle ---
 
@@ -151,6 +157,7 @@ child.on("exit", (code, signal) => {
 });
 
 child.on("error", (err) => {
+  log("child-error", err.message);
   stderr.write(`lsp-proxy: failed to start child: ${err.message}\n`);
   exit(1);
 });
